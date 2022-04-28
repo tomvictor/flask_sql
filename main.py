@@ -5,6 +5,7 @@ from flask_script import Manager
 
 
 from config import Config
+from logic import db_query
 from models import db
 
 app = Flask(__name__)
@@ -16,9 +17,12 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 
 
+
+
+
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return db_query()
 
 
 if __name__ == "__main__":

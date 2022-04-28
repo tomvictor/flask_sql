@@ -4,7 +4,12 @@ from sqlalchemy import JSON, VARCHAR
 db = SQLAlchemy()
 
 
-class Organization(db.Model):
+class ModelSupportMixin:
+
+    def as_dict(self):
+        return {}
+
+class Organization(db.Model,ModelSupportMixin):
     __tablename__ = 'organization'
     identifier = db.Column(VARCHAR(length=36), primary_key=True, index=True, nullable=False)
 
@@ -20,4 +25,7 @@ class Organization(db.Model):
     last_updated = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
 
     def as_dict(self):
-        return self.doc
+        serialized_data = self.doc
+        serialized_data["created"] = self.created
+        serialized_data["last_updated"] = self.last_updated
+        return serialized_data
